@@ -3,8 +3,7 @@
 #include <vector>
 #include <queue>
 using namespace std;
-class Graph
-{
+class Graph {
     int numOfNodes;
     vector<vector<int>> adjList;
 public:
@@ -13,8 +12,9 @@ public:
         this->adjList = adjList;
     }
     void displayAdjacencyList();
-    vector<int> breadthFirstSearch(int src);
-    vector<int> depthFirstSearch(int src);
+    vector<int> breadthFirstSearch(int);
+    vector<int> depthFirstSearch(int);
+    void dfsHelper(int, vector<int>&, vector<bool>&);
 };
 void Graph::displayAdjacencyList() {
     for (int i = 0; i < numOfNodes; i++) {
@@ -43,7 +43,19 @@ vector<int> Graph:: breadthFirstSearch(int src) {
     }
     return nodes;
 }
+void Graph:: dfsHelper(int src, vector<int>& nodes, vector<bool>& visited) {
+    visited[src] = true;
+    nodes.push_back(src);
+    for (auto neighbour: adjList[src]) {
+        if (!visited[neighbour]) {
+            dfsHelper(neighbour, nodes, visited);
+        }
+    }
+}
 vector<int> Graph:: depthFirstSearch(int src) {
-    return {};
+    vector<bool> visited(numOfNodes + 1, 0);
+    vector<int> nodes;
+    dfsHelper(src, nodes, visited);
+    return nodes;
 }
 #endif //  TEST.H
